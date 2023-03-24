@@ -27,7 +27,7 @@ with open("cveid_24_03_2023.csv") as csv_file:
         # Select the span element with the < tooltipCvss2CnaMetrics >
         # CNA framework 2.0
         try:
-            span_cvss2_cna = soup.select_one("span[class*=tooltipCvss2NistMetrics]").text
+            span_cvss2_cna = soup.select_one("span[class*=tooltipCvss2CnaMetrics]").text
             span_cvss2_cna = span_cvss2_cna.replace("(", "").replace(")", "")
         except AttributeError:
             span_cvss2_cna = "NoValue"
