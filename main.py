@@ -2,14 +2,42 @@ import csv
 from bs4 import BeautifulSoup
 import requests
 
-# First create the new file with our options
-with open("cve_cvss_mydate.csv", "w") as cvss_file:
-    writer = csv.writer(cvss_file)
-    writer.writerow(["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"])
+
+exist = False
+last_cve = None
+try:
+    with open("cve_cvss_mydate.csv", "r") as cvss_file:
+        reader = csv.reader(cvss_file)
+
+        for row in reader:    
+            if row == ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]:
+                print("The file exist")
+                exist = True
+            pass
+
+        if row != ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]:
+            last_cve = row
+            print(last_cve)
+        print("check")
+except:
+    print("I've to create the file...")
+
+
+if not exist:
+    # First create the new file with our options
+    with open("cve_cvss_mydate.csv", "w") as cvss_file:
+        writer = csv.writer(cvss_file)
+        writer.writerow(["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"])
 
 
 with open("cveid_24_03_2023.csv") as csv_file:
     csvreader = csv.reader(csv_file)
+
+    # Go to the last cve we get
+    if last_cve:
+        for cve in csvreader:
+            if cve[0] == last_cve:
+                pass
 
     for row in csvreader:
         print(f"https://nvd.nist.gov/vuln/detail/{row[0]}")
