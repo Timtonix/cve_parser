@@ -1,22 +1,28 @@
 import csv
 from bs4 import BeautifulSoup
 import requests
+import time
 
 exist = False
 last_cve = None
+
 try:
     with open("cve_cvss_mydate.csv", "r") as cvss_file:
         reader = csv.reader(cvss_file)
 
         for row in reader:
             if row == ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]:
+                print(row)
                 print("The file exist")
                 exist = True
-            pass
+            else:
+                print('row != ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]')
 
         if row != ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]:
             last_cve = row[0]
             print(last_cve)
+        else:
+            last_cve = ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]
         print("check")
 except FileNotFoundError:
     print("I've to create the file...")
@@ -33,6 +39,10 @@ with open("cveid_24_03_2023.csv") as csv_file:
     # Go to the last cve we get
     for row in csvreader:
         if last_cve == row[0]:
+            last_cve = "Passed"
+
+        # Si le fichier est vide de la première row
+        if last_cve == ["cve", "cvss_cna_3.0", "cvss_nist_3.1", "cvss_cna_2.0", "cvss_nist_2.0"]:
             last_cve = "Passed"
 
         if last_cve == "Passed":
